@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="350.0" prefWidth="500.0" stylesheets="@../css/Task.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="taskscheduler.TaskController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="titleLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" prefWidth="200.0" text="Task" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="nameLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="50.0" prefWidth="150.0" text="Name" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="nameTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#nameChanged" onKeyReleased="#nameChanged" HBox.hgrow="SOMETIMES" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="pathLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="50.0" prefWidth="150.0" text="Path" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="pathTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#pathChanged" onKeyReleased="#pathChanged" HBox.hgrow="SOMETIMES" />
+            <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#pathButtonAction" text="..." HBox.hgrow="SOMETIMES" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="triggerLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="50.0" prefWidth="150.0" text="Trigger" HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="triggerComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#triggerComboBoxAction" HBox.hgrow="SOMETIMES" />
+            <ComboBox fx:id="whenComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#whenComboBoxAction" HBox.hgrow="SOMETIMES" />
+         </children>
+      </HBox>
+      <HBox fx:id="hourHBox" alignment="CENTER" maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="0.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="dateLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="50.0" prefWidth="150.0" text="Day/Hour" HBox.hgrow="ALWAYS" />
+            <DatePicker fx:id="datePicker" maxHeight="1.7976931348623157E308" prefWidth="110.0" HBox.hgrow="NEVER" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" text=" " HBox.hgrow="SOMETIMES" />
+            <TextField fx:id="hoursTextField" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#hoursChanged" onKeyReleased="#hoursChanged" prefWidth="30.0" HBox.hgrow="SOMETIMES" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="5.0" text=":" HBox.hgrow="SOMETIMES" />
+            <TextField fx:id="minutesTextField" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#minutesChanged" onKeyReleased="#minutesChanged" prefWidth="30.0" HBox.hgrow="SOMETIMES" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="5.0" text=":" HBox.hgrow="SOMETIMES" />
+            <TextField fx:id="secondsTextField" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#secondsChanged" onKeyReleased="#secondsChanged" prefWidth="30.0" HBox.hgrow="SOMETIMES" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="delayLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="50.0" prefWidth="150.0" text="Delay" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="delayTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="40.0" onKeyPressed="#delayChanged" onKeyReleased="#delayChanged" HBox.hgrow="SOMETIMES" />
+            <ComboBox fx:id="delayComboBox" maxHeight="1.7976931348623157E308" onAction="#delayComboBoxAction" HBox.hgrow="SOMETIMES" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="repeatLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="50.0" prefWidth="150.0" text="Repeat" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="repeatTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#repeatChanged" onKeyReleased="#repeatChanged" HBox.hgrow="SOMETIMES" />
+            <Button fx:id="repeatIndefinitelyButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#infiniteRepeatAction" text="Indefinitely" HBox.hgrow="SOMETIMES" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="argumentsLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="50.0" prefWidth="150.0" text="Arguments" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="argumentsTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="actionLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="50.0" prefWidth="150.0" text="Action" HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="actionComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#actionComboxBoxAction" HBox.hgrow="SOMETIMES" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="descriptionLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" minWidth="50.0" prefWidth="150.0" text="Description" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="descriptionTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Button fx:id="validateButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#validateButtonAction" text="Validate" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
