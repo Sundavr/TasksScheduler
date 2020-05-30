@@ -14,8 +14,7 @@ La tâche peut être unique ou répétée tous les jours.
 Un nombre de répétitions suivant la première exécution de 
 la tâche peut également être renseigné, avec un délai au choix entre chacune des répétitions.
 
-Langues disponibles :
-{Français,  Anglais}
+81 langues disponibles.
 Pour ajouter une langue, rajouter dans src/texts un fichier nommé "SIGLE_DE_LA_LANGUE".properties avec toutes les clés renseignées et ajouter ce sigle dans l'énumération Language.java
 
 Raccourcis claviers disponibles, possibilités d'undo/redo les actions effectuées, d'annuler toutes les tâches planifiées ou 1 par 1, de replanifier toutes les tâches.
