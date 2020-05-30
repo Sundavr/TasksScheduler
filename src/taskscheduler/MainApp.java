@@ -11,7 +11,9 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
@@ -27,7 +29,7 @@ import javax.imageio.ImageIO;
 import taskscheduler.Dialog.CheckBoxAlert;
 
 /**
- * MainApp de l'interface graphique du l'application Sudoku.
+ * MainApp de l'interface graphique du planificateur de taches.
  * @author JOHAN
  */
 public class MainApp extends Application {
@@ -58,7 +60,7 @@ public class MainApp extends Application {
         taskStage.setScene(new Scene(taskScene));
         taskStage.initOwner(stage);
         taskStage.initModality(Modality.APPLICATION_MODAL);
-        
+
         Language initLanguage = Language.FR;
         EditablePropertiesManager configPropertiesManager = new EditablePropertiesManager();
         try {
@@ -69,12 +71,57 @@ public class MainApp extends Application {
             } catch (IOException ioe2) {
                 Dialog.warning("Impossible de créer le fichier '" + configPropertiesManager.getPath() + "'", ioe2.getMessage());
             }
+        } catch (IllegalArgumentException iae) { //no enum constant found for the language
+            try {
+                configPropertiesManager.deleteProperty("Language");
+            } catch (IOException ioe) {/*Impossible to access to config file, should never happend*/}
         }
-        HashMap<Language, RessourcesPropertiesManager> propertiesManagersMap = new HashMap<>();
+        this.i18nPropertiesManager = new I18nPropertiesManager(initLanguage, Language.values());
+        //initialisation des enumérations
+        HashMap<Language, String> startProgramMap = new HashMap<>();
+        HashMap<Language, String> alertMap = new HashMap<>();
+        HashMap<Language, String> hourMap = new HashMap<>();
+        HashMap<Language, String> startUpMap = new HashMap<>();
+        HashMap<Language, String> oneTimeMap = new HashMap<>();
+        HashMap<Language, String> everyDaysMap = new HashMap<>();
         for (Language language : Language.values()) {
-            propertiesManagersMap.put(language, new RessourcesPropertiesManager("texts", language.name() + ".properties"));
+            try {
+                startProgramMap.put(language, this.i18nPropertiesManager.readProperty(language, "taskActionStartProgram"));
+                alertMap.put(language, this.i18nPropertiesManager.readProperty(language, "taskActionAlert"));
+                hourMap.put(language, this.i18nPropertiesManager.readProperty(language, "triggerHour"));
+                startUpMap.put(language, this.i18nPropertiesManager.readProperty(language, "triggerStartUp"));
+                oneTimeMap.put(language, this.i18nPropertiesManager.readProperty(language, "whenOneTime"));
+                everyDaysMap.put(language, this.i18nPropertiesManager.readProperty(language, "whenEveryDays"));
+            } catch (IOException ioe) {
+                Language.addUnavailableLanguages(language);
+            }
         }
-        this.i18nPropertiesManager = new I18nPropertiesManager(propertiesManagersMap, initLanguage);
+        if (!Language.getUnavailableLanguages().isEmpty()) {
+            Dialog.warning("Language unavalaible", "The languages " + Language.getUnavailableLanguages() + " haven't been founds", false);
+        }
+        //make sure the init language is available
+        if (Language.getUnavailableLanguages().contains(initLanguage)) { //not available
+            try {
+                configPropertiesManager.deleteProperty("Language");
+            } catch (IOException ioe) {/*Impossible to clean up the config file*/}
+            if (!Language.getUnavailableLanguages().contains(Language.EN)) {
+                initLanguage = Language.EN;
+            } else {
+                List<Language> availableLanguages = Arrays.asList(Language.values());
+                availableLanguages.removeAll(Language.getUnavailableLanguages());
+                if (!availableLanguages.isEmpty()) {
+                    initLanguage = availableLanguages.get(0);
+                } else {
+                    Dialog.error("No language available", "Application will exit");
+                    exit();
+                }
+            }
+        }
+        this.i18nPropertiesManager.setLanguage(initLanguage); //definitive initLanguage
+        TaskAction.init(startProgramMap, alertMap);
+        Trigger.init(hourMap, startUpMap);
+        When.init(oneTimeMap, everyDaysMap);
+        
         addAppToTray();
         ParametersHandler parametersHandler = new ParametersHandler(initLanguage, stage, taskStage, configPropertiesManager, this.i18nPropertiesManager, this.trayIcon);
         
@@ -130,7 +177,7 @@ public class MainApp extends Application {
                 } catch (IOException ioe) {
                     try {
                         Dialog.error(MessageFormat.format(this.i18nPropertiesManager.readProperty("impossibleWrite"), configPropertiesManager.getPath()), ioe.getMessage());
-                    } catch (IOException ioe2) {
+                    } catch (IOException | NullPointerException ex) {
                         Dialog.warning("Impossible to write in the file '" + configPropertiesManager.getPath() + "'", ioe.getMessage());
                     }
                 }
@@ -199,7 +246,7 @@ public class MainApp extends Application {
                     }
                 }
             });
-
+            
             MenuItem openMenuItem = new MenuItem("Open");
             openMenuItem.setName("openMenuItem");
             try {
@@ -235,7 +282,7 @@ public class MainApp extends Application {
         } catch (java.awt.AWTException | IOException ex) {
             try {
                 Dialog.error(this.i18nPropertiesManager.readProperty("unableInitTrayTitle"), MessageFormat.format(this.i18nPropertiesManager.readProperty("unableInitTrayContent"), ex.getMessage()));
-            } catch (IOException ioe) {
+            } catch (IOException | NullPointerException ex2) {
                 Dialog.error("Unable to init tray", "Impossible to init tray, you won't be able to minimize the application as notification.\n" + ex.getMessage());
             }
             this.trayLaunched = false;

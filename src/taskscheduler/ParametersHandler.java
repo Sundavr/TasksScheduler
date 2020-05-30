@@ -3,6 +3,7 @@ package taskscheduler;
 import java.awt.MenuItem;
 import java.awt.TrayIcon;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import javafx.stage.Stage;
 
 /**
@@ -79,21 +80,33 @@ public class ParametersHandler {
      */
     private void updateLanguage(Language newLanguage) {
         this.language = newLanguage;
-        this.i18nPropertiesManager.setLanguage(this.language);
         TaskAction.setLanguage(this.language);
         Trigger.setLanguage(this.language);
         When.setLanguage(this.language);
+        try {
+            this.i18nPropertiesManager.setLanguage(this.language);
+        } catch (InvalidParameterException ipe) {/*Pas de traduction dans cette langue*/}
     }
     
     /**
      * Change le langage de l'application.
      * @param newLanguage la nouvelle langue a utiliser
-     * @throws IOException exception levee quand il est mpossible d'ecrire 
+     * @throws IllegalArgumentException exception levee quand la langue n'est pas disponible
+     * @throws IOException exception levee quand il est impossible d'ecrire 
      * dans le fichier config. A noter que le langage de l'application change tout de meme.
      */
-    public void setLanguage(Language newLanguage) throws IOException {
-        updateLanguage(newLanguage);
-        this.configPropertiesManager.setProperty("Language", this.language);
+    public void setLanguage(Language newLanguage) throws IllegalArgumentException, IOException {
+        if (Language.getUnavailableLanguages().contains(newLanguage)) throw new IllegalArgumentException("The given language '" + newLanguage + "' isn't available");
+        this.language = newLanguage;
+        TaskAction.setLanguage(this.language);
+        Trigger.setLanguage(this.language);
+        When.setLanguage(this.language);
+        this.configPropertiesManager.setProperty("Language", this.language.name());
+        try {
+            this.i18nPropertiesManager.setLanguage(this.language);
+        } catch (InvalidParameterException ipe) {
+            throw new IOException(ipe.getMessage());
+        }
         this.stage.setTitle(this.i18nPropertiesManager.readProperty("mainTitle"));
         this.taskStage.setTitle(this.i18nPropertiesManager.readProperty("mainTitle"));
         for (int i=0; i<this.trayIcon.getPopupMenu().getItemCount(); i++) {

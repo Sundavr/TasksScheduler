@@ -1,5 +1,6 @@
 package taskscheduler;
 
+import java.util.Collection;
 import java.util.Optional;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -114,12 +115,12 @@ public class Dialog {
     
     /**
      * Affiche un requete avec un champ a remplir.
-     * @param tile titre de la requete
+     * @param title titre de la requete
      * @param message message a afficher
      * @return le message saisie par l'utilisateur
      */
-    public static String request(String tile, String message) {
-        return showRequest(tile, message);
+    public static String request(String title, String message) {
+        return showRequest(title, message);
     }
     
     /**
@@ -257,6 +258,22 @@ public class Dialog {
          */
         public void setCheckBoxValue(boolean newValue) {
             this.checkBox.setSelected(newValue);
+        }
+        
+        /**
+         * Modifie les boutons de l'Alert.
+         * @param buttonsTypes les nouveaux boutons
+         */
+        public void setButtonsType(ButtonType buttonsTypes) {
+            getButtonTypes().setAll(buttonsTypes);
+        }
+        
+        /**
+         * Modifie les boutons de l'Alert.
+         * @param buttonsTypes les nouveaux boutons
+         */
+        public void setButtonsType(Collection<? extends ButtonType> buttonsTypes) {
+            getButtonTypes().setAll(buttonsTypes);
         }
     }
     

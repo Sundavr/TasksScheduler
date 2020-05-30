@@ -76,7 +76,6 @@ public class EditablePropertiesManager extends PropertiesManager {
         }
     }
     
-    
     /**
      * Cree le fichier properties s'il n'existe pas deja.
      * @throws java.io.IOException exception levee quand il est impossible de creer le fichier properties

@@ -1,7 +1,6 @@
 package org.json;
 
 import java.io.Closeable;
-
 /*
  Copyright (c) 2002 JSON.org
 

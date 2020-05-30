@@ -176,7 +176,6 @@ public class TaskController {
             this.fileChooser.setInitialDirectory(null);
         }
         File file = this.fileChooser.showOpenDialog(this.stage);
-        System.out.println(file);
         if (file != null) {
             this.pathTextField.setText(file.getPath());
             pathChanged(null);
@@ -394,7 +393,7 @@ public class TaskController {
             } catch (NumberFormatException nfe) {
                 try {
                     Dialog.error(this.i18nPropertiesManager.readProperty("invalidHoursTitle"), MessageFormat.format(this.i18nPropertiesManager.readProperty("invalidHoursContent"), this.hoursTextField.getText()));
-                } catch (IOException ioe) {
+                } catch (IOException | NullPointerException ex) {
                     Dialog.error("Hour error", "the given hour : '" + this.hoursTextField.getText() + "' isn't a valid number.");
                 }
                 return;
@@ -407,7 +406,7 @@ public class TaskController {
             } catch (NumberFormatException nfe) {
                 try {
                     Dialog.error(this.i18nPropertiesManager.readProperty("invalidMinutesTitle"), MessageFormat.format(this.i18nPropertiesManager.readProperty("invalidMinutesContent"), this.minutesTextField.getText()));
-                } catch (IOException ioe) {
+                } catch (IOException | NullPointerException ex) {
                     Dialog.error("Minutes error", "the given minutes : '" + this.minutesTextField.getText() + "' isn't a valid number.");
                 }
                 return;
@@ -420,7 +419,7 @@ public class TaskController {
             } catch (NumberFormatException nfe) {
                 try {
                     Dialog.error(this.i18nPropertiesManager.readProperty("invalidSecondsTitle"), MessageFormat.format(this.i18nPropertiesManager.readProperty("invalidSecondsContent"), this.secondsTextField.getText()));
-                } catch (IOException ioe) {
+                } catch (IOException | NullPointerException ex) {
                     Dialog.error("Seconds error", "the given seconds : '" + this.secondsTextField.getText() + "' isn't a valid number.");
                 }
                 return;
@@ -443,7 +442,7 @@ public class TaskController {
             } catch (NumberFormatException nfe) {
                 try {
                     Dialog.error(this.i18nPropertiesManager.readProperty("invalidDelayTitle"), MessageFormat.format(this.i18nPropertiesManager.readProperty("invalidDelayContent"), this.delayTextField.getText()));
-                } catch (IOException ioe) {
+                } catch (IOException | NullPointerException ex) {
                     Dialog.error("Delay error", "the given delay : '" + this.delayTextField.getText() + "' isn't a valid number.");
                 }
                 return;
@@ -456,7 +455,7 @@ public class TaskController {
             } catch (NumberFormatException nfe) {
                 try {
                     Dialog.error(this.i18nPropertiesManager.readProperty("invalidRepeatTitle"), MessageFormat.format(this.i18nPropertiesManager.readProperty("invalidRepeatContent"), this.repeatTextField.getText()));
-                } catch (IOException ioe) {
+                } catch (IOException | NullPointerException ex) {
                     Dialog.error("Repeat error", "the given repeat amount : '" + this.repeatTextField.getText() + "' isn't a correct number.");
                 }
                 return;

@@ -1,6 +1,7 @@
 package taskscheduler;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * Gestionnaire de properties.
@@ -45,12 +46,40 @@ public abstract class PropertiesManager {
     public abstract void setFileName(String fileName);
     
     /**
+     * Formatte le message donne avec gestion des arguments.
+     * Le message doit avoir des guillements "'" remplaces par des doubles 
+     * guillements "''" et les arguments sont indiques a l'aide de "{<code>argNum</code>}" ou 
+     * "''{<code>argNum</code>}''".
+     * <code>argNum</code> doit etre une valeure entiere positive
+     * @param message message a formatter
+     * @param args les arguments du message
+     * @return le message formatte
+     * @throws NullPointerException si le message est null
+     */
+    public String formatMessage(String message, Object... args) {
+        return MessageFormat.format(message, args);
+    }
+    
+    /**
      * Recupere la valeur associee a la propriete donnee.
      * @param key nom de la propriete
      * @return la valeur associee a la propriete donnee
      * @throws IOException Impossible de lire le fichier properties ou aucune propriete portant ce nom trouvee
      */
     public abstract String readProperty(String key) throws IOException;
+    
+    /**
+     * Recupere la valeur associee a la propriete donnee.
+     * La valeur est ensuite formatte via la methode 
+     * {@link #formatMessage(String, Object...)}
+     * @param key nom de la propriete
+     * @param args les arguments de la valeur associee a la cle
+     * @return la valeur formattee associee a la propriete donnee
+     * @throws IOException Impossible de lire le fichier properties ou aucune propriete portant ce nom trouvee
+     */
+    public String readFormattedProperty(String key, Object... args) throws IOException {
+        return formatMessage(readProperty(key), args);
+    }
     
     /**
      * Recupere la valeur associee a la propriete donnee, comportement identique 

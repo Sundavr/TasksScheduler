@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -243,7 +244,7 @@ public class HomeController implements PropertyChangeListener {
             if (displayMessages) {
                 try {
                     this.tasksScheduler.displayMessage(MessageFormat.format(this.i18nPropertiesManager.readProperty("missedTask"), task.getName()), task.getDescription());
-                } catch (IOException ioe) {
+                } catch (IOException | NullPointerException ex) {
                     this.tasksScheduler.displayMessage("Task missed: " + task.getName(), task.getDescription());
                 }
             }
@@ -386,7 +387,7 @@ public class HomeController implements PropertyChangeListener {
             try {
                 this.undoMenuItem.setText(MessageFormat.format(this.i18nPropertiesManager.readProperty("undoMenuItem"), (this.actionsManager.getNbUndoActions() == 0) ? "" : this.actionsManager.getLastUndoAction().getName()));
                 this.redoMenuItem.setText(MessageFormat.format(this.i18nPropertiesManager.readProperty("redoMenuItem"), (this.actionsManager.getNbRedoActions() == 0) ? "" : this.actionsManager.getLastRedoAction().getName()));
-            } catch (IOException ioe) {
+            } catch (IOException | NullPointerException ex) {
                 this.undoMenuItem.setText(MessageFormat.format("Undo {0}\tCtrl+Z", (this.actionsManager.getNbUndoActions() == 0) ? "" : this.actionsManager.getLastUndoAction().getName()));
                 this.redoMenuItem.setText(MessageFormat.format("Redo {0}\tCtrl+Shift+Z", (this.actionsManager.getNbRedoActions() == 0) ? "" : this.actionsManager.getLastRedoAction().getName()));
             }
@@ -509,7 +510,9 @@ public class HomeController implements PropertyChangeListener {
     
     @FXML
     private void languageAction(ActionEvent event) {
-        ChoiceDialog<Language> dialog = new ChoiceDialog<>(this.parametersHandler.getLanguage(), Language.values());
+        ArrayList<Language> availableLanguages = new ArrayList<>(Arrays.asList(Language.values()));
+        availableLanguages.removeAll(Language.getUnavailableLanguages());
+        ChoiceDialog<Language> dialog = new ChoiceDialog<>(this.parametersHandler.getLanguage(), availableLanguages);
         dialog.getDialogPane().getButtonTypes().setAll(this.okButtonType, this.cancelButtonType);
         try {
             dialog.setTitle(this.i18nPropertiesManager.readProperty("LanguageDialogTitle"));
@@ -523,10 +526,16 @@ public class HomeController implements PropertyChangeListener {
         if (!language.equals(this.parametersHandler.getLanguage())) {
             try {
                 this.parametersHandler.setLanguage(language);
+            } catch (IllegalArgumentException iae) {
+                try {
+                    Dialog.error(this.i18nPropertiesManager.readProperty("unavailableLanguageTitle"), MessageFormat.format(this.i18nPropertiesManager.readProperty("unavailableLanguageContent"), language));
+                } catch (IOException | NullPointerException ex) {
+                    Dialog.error("Unavailable Language", "Sorry but the given language '" + language + "' isn't available");
+                }
             } catch (IOException ioe) {
                 try {
                     Dialog.error(MessageFormat.format(this.i18nPropertiesManager.readProperty("impossibleWrite"), this.configPropertiesManager.getPath()), ioe.getMessage());
-                } catch (IOException ioe2) {
+                } catch (IOException | NullPointerException ex) {
                     Dialog.error("Impossible to write in the file '" + this.configPropertiesManager.getPath() + "'", ioe.getMessage());
                 }
             }
@@ -578,7 +587,7 @@ public class HomeController implements PropertyChangeListener {
             } catch (IOException ioe) {
                 try {
                     Dialog.error(MessageFormat.format(this.i18nPropertiesManager.readProperty("impossibleWrite"), this.configPropertiesManager.getPath()), ioe.getMessage());
-                } catch (IOException ioe2) {
+                } catch (IOException | NullPointerException ex) {
                     Dialog.error("Impossible to write in the file '" + this.configPropertiesManager.getPath() + "'", ioe.getMessage());
                 }
             }
@@ -622,7 +631,7 @@ public class HomeController implements PropertyChangeListener {
             } catch (IOException ioe) {
                 try {
                     Dialog.error(MessageFormat.format(this.i18nPropertiesManager.readProperty("impossibleWrite"), this.configPropertiesManager.getPath()), ioe.getMessage());
-                } catch (IOException ioe2) {
+                } catch (IOException | NullPointerException ex) {
                     Dialog.error("Impossible to write in the file '" + this.configPropertiesManager.getPath() + "'", ioe.getMessage());
                 }
             }
@@ -647,7 +656,7 @@ public class HomeController implements PropertyChangeListener {
         } catch (IOException ioe) {
             try {
                 Dialog.error(MessageFormat.format(this.i18nPropertiesManager.readProperty("impossibleWrite"), this.configPropertiesManager.getPath()), ioe.getMessage());
-            } catch (IOException ioe2) {
+            } catch (IOException | NullPointerException ex) {
                 Dialog.error("Impossible to write in the file '" + this.configPropertiesManager.getPath() + "'", ioe.getMessage());
             }
         }

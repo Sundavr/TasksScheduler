@@ -1,3 +1,4 @@
 .signJar.bat
 config.properties
 tasks.json
+build/
