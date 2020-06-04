@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="TasksScheduler.jar" size="585865" download="eager" />
+    <jar href="TasksScheduler.jar" size="399834" download="eager" />
   </resources>
   <jfx:javafx-desc  width="800" height="600" main-class="taskscheduler.MainApp"  name="TasksScheduler" />
   <update check="always"/>
