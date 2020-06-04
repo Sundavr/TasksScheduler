@@ -5,5 +5,5 @@ package taskscheduler.ActionsManager;
  * @author Johan
  */
 public enum OperationType {
-    ADD, EDIT, DELETE, PASTE, DUPLICATE, CANCEL;
+    ADD, EDIT, DELETE, PASTE, DUPLICATE, CANCEL, OTHER;
 }

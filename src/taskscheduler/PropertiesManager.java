@@ -70,6 +70,22 @@ public abstract class PropertiesManager {
     
     /**
      * Recupere la valeur associee a la propriete donnee.
+     * S'il n'y en a pas, retourne <code>orElse</code>.
+     * @param key nom de la propriete
+     * @param orElse valuer retournee si la propriete n'existe pas ou n'a pas pu 
+     * etre lue
+     * @return la valeur associee a la propriete donnee
+     */
+    public String readPropertyOrElse(String key, String orElse) {
+        try {
+            return readProperty(key);
+        } catch (IOException ioe) {
+            return orElse;
+        }
+    }
+    
+    /**
+     * Recupere la valeur associee a la propriete donnee.
      * La valeur est ensuite formatte via la methode 
      * {@link #formatMessage(String, Object...)}
      * @param key nom de la propriete
@@ -79,6 +95,25 @@ public abstract class PropertiesManager {
      */
     public String readFormattedProperty(String key, Object... args) throws IOException {
         return formatMessage(readProperty(key), args);
+    }
+    
+    /**
+     * Recupere la valeur associee a la propriete donnee.
+     * S'il n'y en a pas, retourne <code>orElse</code>.
+     * La valeur est ensuite formatte via la methode 
+     * {@link #formatMessage(String, Object...)}
+     * @param key nom de la propriete
+     * @param orElse valuer retournee si la propriete n'existe pas ou n'a pas pu 
+     * etre lue
+     * @param args les arguments de la valeur associee a la cle
+     * @return la valeur formattee associee a la propriete donnee
+     */
+    public String readFormattedPropertyOrElse(String key, String orElse, Object... args) {
+        try {
+            return formatMessage(readProperty(key), args);
+        } catch (IOException ioe) {
+            return orElse;
+        }
     }
     
     /**

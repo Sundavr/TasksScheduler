@@ -1160,6 +1160,7 @@ public class HomeController implements PropertyChangeListener {
      */
     public void refresh() {
         try {
+            this.tasksTable.setPlaceholder(new Text(this.i18nPropertiesManager.readProperty("tasksTablePlaceholder")));
             //Menu bar
             this.fileMenu.setText(this.i18nPropertiesManager.readProperty("fileMenu"));
             this.editMenu.setText(this.i18nPropertiesManager.readProperty("editMenu"));

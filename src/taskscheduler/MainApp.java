@@ -233,7 +233,7 @@ public class MainApp extends Application {
             int trayIconWidth = new TrayIcon(trayIconImage).getSize().width;
             int trayIconHeight = new TrayIcon(trayIconImage).getSize().height;
             this.trayIcon = new TrayIcon(trayIconImage.getScaledInstance(trayIconWidth, trayIconHeight, java.awt.Image.SCALE_SMOOTH));
-            this.tray.add(trayIcon);
+            this.tray.add(this.trayIcon);
             
             this.trayIcon.addMouseListener(new MouseAdapter() {
                 @Override
